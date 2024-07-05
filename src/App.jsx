@@ -18,6 +18,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,9 +45,13 @@ function App() {
         } else {
           console.error(error);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchPosts();
+    setTimeout(() => {
+      fetchPosts();
+    }, 1000);
 
     return () => {
       console.log("Cleanup");
@@ -177,7 +182,13 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home clearAll={handleClearAll} posts={searchResults} />}
+          element={
+            <Home
+              onLoad={isLoading}
+              clearAll={handleClearAll}
+              posts={searchResults}
+            />
+          }
         />
         <Route
           path="/post"
