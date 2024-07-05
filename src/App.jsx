@@ -10,6 +10,7 @@ import { Routes, useNavigate, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import toast, { Toaster } from "react-hot-toast";
+const API_URL = "https://json-server-7-oy-7dars.onrender.com";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -25,7 +26,7 @@ function App() {
 
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/posts`, {
+        const response = await fetch(`${API_URL}/posts`, {
           signal,
         });
         if (!response.ok) {
@@ -71,7 +72,7 @@ function App() {
     const newPost = { id, title: postTitle, datetime, body: postBody };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/posts`, {
+      const response = await fetch(`${API_URL}/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,12 +115,9 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/posts/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL}/posts/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         const postsList = posts.filter((post) => post.id !== id);
@@ -152,7 +150,7 @@ function App() {
   const handleClearAll = async () => {
     try {
       for (let post of posts) {
-        await fetch(`${import.meta.env.VITE_API_URL}/posts/${post.id}`, {
+        await fetch(`${API_URL}/posts/${post.id}`, {
           method: "DELETE",
         });
         setPosts([]);
